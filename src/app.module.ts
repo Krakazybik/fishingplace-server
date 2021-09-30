@@ -9,6 +9,7 @@ import { User } from './user/user.model';
 import { GearModule } from './gear/gear.module';
 import { Trophy } from './trophies/trophies.model';
 import { Gear } from './gear/gear.model';
+import { WeatherModule } from './weather/weather.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { Gear } from './gear/gear.model';
       autoLoadModels: true,
     }),
     GearModule,
+    WeatherModule,
   ],
   controllers: [AppController],
   providers: [AppService],

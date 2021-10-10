@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { map } from 'rxjs';
 import { WeatherService } from './weather.service';
 
@@ -10,5 +10,10 @@ export class WeatherController {
     return this.weatherService
       .getYandexWeatherAt(lng, lat)
       .pipe(map((response) => response.data));
+  }
+
+  @Get('place/:id')
+  getWeatherByPlaceId(@Param('id') palaceId) {
+    return palaceId;
   }
 }

@@ -2,14 +2,18 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from './user.model';
 import { CreateUserDto } from './dto/create-user.dto';
+import { PlacesService } from '../places/places.service';
+import { AddUserPlaceDto } from './dto/add-user-place.dto';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User) private userRepository: typeof User) {}
+  constructor(
+    @InjectModel(User) private userRepository: typeof User,
+    private placeService: PlacesService,
+  ) {}
 
   async createUser(dto: CreateUserDto) {
-    const user = await this.userRepository.create(dto);
-    return user;
+    return await this.userRepository.create(dto);
   }
 
   async getAllUsers() {
@@ -23,5 +27,15 @@ export class UserService {
       `User with id: ${id} Not found`,
       HttpStatus.NOT_FOUND,
     );
+  }
+
+  async addUserPlace({ userId, placeId }: AddUserPlaceDto) {
+    const user = await this.userRepository.findByPk(userId);
+    const place = await this.placeService.getPlaceById(placeId);
+    if (user && place) {
+      await user.$add('places', place.id);
+      return placeId;
+    }
+    throw new HttpException('User or Place not found', HttpStatus.NOT_FOUND);
   }
 }

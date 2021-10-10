@@ -1,4 +1,12 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsToMany,
+  Column,
+  DataType,
+  Model,
+  Table,
+} from 'sequelize-typescript';
+import { Place } from 'src/places/place.model';
+import { UserPlace } from './user-places.model';
 
 interface UserCreationAttrs {
   email: string;
@@ -26,4 +34,7 @@ export class User extends Model<User, UserCreationAttrs> {
 
   @Column({ type: DataType.STRING })
   banReason: string;
+
+  @BelongsToMany(() => Place, () => UserPlace)
+  places: Place[];
 }

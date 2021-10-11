@@ -5,11 +5,15 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Place } from './place.model';
 import { User } from '../user/user.model';
 import { UserPlace } from '../user/user-places.model';
+import { WeatherModule } from '../weather/weather.module';
 
 @Module({
   controllers: [PlacesController],
   providers: [PlacesService],
-  imports: [SequelizeModule.forFeature([Place, User, UserPlace])],
+  imports: [
+    SequelizeModule.forFeature([Place, User, UserPlace]),
+    WeatherModule,
+  ],
   exports: [PlacesService],
 })
 export class PlacesModule {}

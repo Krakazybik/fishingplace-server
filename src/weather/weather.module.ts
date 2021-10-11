@@ -9,5 +9,6 @@ import { HttpModule } from '@nestjs/axios';
   controllers: [WeatherController],
   providers: [WeatherService],
   imports: [SequelizeModule.forFeature([Weather]), HttpModule],
+  exports: [WeatherService],
 })
 export class WeatherModule {}

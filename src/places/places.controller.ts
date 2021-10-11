@@ -15,4 +15,9 @@ export class PlacesController {
   createPlace(@Body() dto: CreatePlaceDto) {
     return this.placesService.createPlace(dto);
   }
+
+  @Get('/weather/:id')
+  getPlaceWeatherById(@Param('id') placeId) {
+    return this.placesService.getPlaceWeatherById(placeId);
+  }
 }

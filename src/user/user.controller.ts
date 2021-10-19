@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserService } from './user.service';
 import { AddUserPlaceDto } from './dto/add-user-place.dto';
@@ -19,5 +19,11 @@ export class UserController {
   @Get()
   getAllUser() {
     return this.usersService.getAllUsers();
+  }
+
+  /* TODO: Remove get username by id */
+  @Get('/name/:id')
+  getUserNameById(@Param('id') id) {
+    return this.usersService.getUserNameById(id);
   }
 }

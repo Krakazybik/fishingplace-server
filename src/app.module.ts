@@ -13,6 +13,8 @@ import { WeatherModule } from './weather/weather.module';
 import { PlacesModule } from './places/places.module';
 import { UserPlace } from './user/user-places.model';
 import { Place } from './places/place.model';
+import { BlogsModule } from './blogs/blogs.module';
+import { Blog } from './blogs/blogs.model';
 
 @Module({
   imports: [
@@ -26,12 +28,13 @@ import { Place } from './places/place.model';
       username: process.env.POSTGRES_USER,
       password: String(process.env.POSTGRES_PASSWORD),
       database: process.env.POSTGRES_DB,
-      models: [User, Trophy, Gear, Place, UserPlace],
+      models: [User, Trophy, Gear, Place, UserPlace, Blog],
       autoLoadModels: true,
     }),
     GearModule,
     WeatherModule,
     PlacesModule,
+    BlogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

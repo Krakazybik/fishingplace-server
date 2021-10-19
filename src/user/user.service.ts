@@ -29,6 +29,15 @@ export class UserService {
     );
   }
 
+  async getUserNameById(id: number) {
+    const user = await this.userRepository.findByPk(id);
+    if (user) return user.username;
+    throw new HttpException(
+      `User with id: ${id} Not found`,
+      HttpStatus.NOT_FOUND,
+    );
+  }
+
   async addUserPlace({ userId, placeId }: AddUserPlaceDto) {
     const user = await this.userRepository.findByPk(userId);
     const place = await this.placeService.getPlaceById(placeId);

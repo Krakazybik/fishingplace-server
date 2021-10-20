@@ -15,6 +15,7 @@ import { UserPlace } from './user/user-places.model';
 import { Place } from './places/place.model';
 import { BlogsModule } from './blogs/blogs.module';
 import { Blog } from './blogs/blogs.model';
+import { AchievementsModule } from './achievements/achievements.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { Blog } from './blogs/blogs.model';
     WeatherModule,
     PlacesModule,
     BlogsModule,
+    AchievementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

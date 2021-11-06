@@ -6,10 +6,8 @@ import { WeatherService } from '../weather/weather.service';
 import { map } from 'rxjs';
 import { PlaceWeather } from './places-weather.model';
 import { Op } from 'sequelize';
-import { IWeatherPart } from '../shared/types';
-
-const MS_IN_DAY = 3600 * 24 * 1000;
-const MS_IN_HOUR = 3600 * 1000;
+import { IWeatherPart } from './dto/create-place-weather.dto';
+import { MS_IN_DAY } from 'src/shared/consts';
 
 @Injectable()
 export class PlacesService {
@@ -32,9 +30,10 @@ export class PlacesService {
     const actualWeather = await this.placeWeatherRepository.findAll({
       where: {
         placeId: placeId,
-        updatedAt: { [Op.gt]: (Date.now() - MS_IN_DAY) / 1000 },
+        updatedAt: { [Op.gt]: new Date(Date.now() - MS_IN_DAY) },
       },
     });
+
     if (actualWeather.length) return actualWeather;
 
     const place = await this.placeRepository.findByPk(placeId);
@@ -45,8 +44,8 @@ export class PlacesService {
           map((response) => ({
             parts: response.data.forecast.parts.map(
               (item): IWeatherPart => ({
-                name: item.name,
-                temp: item.temp,
+                name: item.part_name,
+                temp: item.temp_avg,
                 humidity: item.humidity,
                 pressure_mm: item.pressure_mm,
                 pressure_pa: item.pressure_pa,

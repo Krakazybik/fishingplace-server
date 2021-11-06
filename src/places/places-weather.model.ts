@@ -5,8 +5,8 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { IWeatherPart } from 'src/shared/types';
 import { Place } from './place.model';
+import { IWeatherPart } from './dto/create-place-weather.dto';
 
 export interface IPlaceWeatherCreationAttrs {
   temp: number;
@@ -53,7 +53,7 @@ export class PlaceWeather extends Model<
   @Column({ type: DataType.FLOAT, allowNull: false })
   wind_speed: number;
 
-  @Column({ type: DataType.INTEGER, allowNull: false })
+  @Column({ type: DataType.FLOAT, allowNull: false })
   wind_gust: number;
 
   @Column({ type: DataType.STRING, allowNull: false })

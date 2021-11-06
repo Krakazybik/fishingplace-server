@@ -3,13 +3,13 @@ import { HttpService } from '@nestjs/axios';
 import { YANDEX_WEATHER_FREE_BASEURL } from './weather.api';
 import { Observable } from 'rxjs';
 import { AxiosResponse } from 'axios';
-import { IWeatherPart, IYandexWeatherFact } from 'src/shared/types';
+import { IYandexWeatherPart, IYandexWeatherFact } from 'src/shared/types';
 
 export interface IYandexWeatherResponse {
   now: number;
   fact: IYandexWeatherFact;
   forecast: {
-    parts: Array<IWeatherPart>;
+    parts: Array<IYandexWeatherPart>;
   };
 }
 

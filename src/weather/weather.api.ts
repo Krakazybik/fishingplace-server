@@ -64,4 +64,7 @@ export interface IWeatherResponse {
   forecast: IWeatherForecast;
 }
 
-export const YANDEX_WEATHER_BASEURL = 'https://api.weather.yandex.ru/v2';
+export const YANDEX_WEATHER_BASEURL =
+  'https://api.weather.yandex.ru/v2/forecast';
+export const YANDEX_WEATHER_FREE_BASEURL =
+  'https://api.weather.yandex.ru/v2/informers';

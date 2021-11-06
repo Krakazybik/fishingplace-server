@@ -8,7 +8,7 @@ export class WeatherController {
   @Get('')
   getWeather(@Query('lng') lng: number, @Query('lat') lat: number) {
     return this.weatherService
-      .getYandexWeatherAt(lng, lat)
+      .getYandexFreeWeatherAt(lng, lat)
       .pipe(map((response) => response.data));
   }
 

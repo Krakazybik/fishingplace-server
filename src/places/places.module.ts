@@ -6,12 +6,13 @@ import { Place } from './place.model';
 import { User } from '../user/user.model';
 import { UserPlace } from '../user/user-places.model';
 import { WeatherModule } from '../weather/weather.module';
+import { PlaceWeather } from './places-weather.model';
 
 @Module({
   controllers: [PlacesController],
   providers: [PlacesService],
   imports: [
-    SequelizeModule.forFeature([Place, User, UserPlace]),
+    SequelizeModule.forFeature([Place, User, UserPlace, PlaceWeather]),
     WeatherModule,
   ],
   exports: [PlacesService],

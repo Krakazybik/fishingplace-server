@@ -4,11 +4,19 @@ import { Place } from './place.model';
 import { CreatePlaceDto } from './dto/create-place.dto';
 import { WeatherService } from '../weather/weather.service';
 import { map } from 'rxjs';
+import { PlaceWeather } from './places-weather.model';
+import { Op } from 'sequelize';
+import { IWeatherPart } from '../shared/types';
+
+const MS_IN_DAY = 3600 * 24 * 1000;
+const MS_IN_HOUR = 3600 * 1000;
 
 @Injectable()
 export class PlacesService {
   constructor(
     @InjectModel(Place) private placeRepository: typeof Place,
+    @InjectModel(PlaceWeather)
+    private placeWeatherRepository: typeof PlaceWeather,
     private weatherService: WeatherService,
   ) {}
 
@@ -21,12 +29,53 @@ export class PlacesService {
   }
 
   async getPlaceWeatherById(placeId: number) {
+    const actualWeather = await this.placeWeatherRepository.findAll({
+      where: {
+        placeId: placeId,
+        updatedAt: { [Op.gt]: (Date.now() - MS_IN_DAY) / 1000 },
+      },
+    });
+    if (actualWeather.length) return actualWeather;
+
     const place = await this.placeRepository.findByPk(placeId);
     if (place) {
-      return this.weatherService
-        .getYandexWeatherAt(place.lng, place.lat)
-        .pipe(map((response) => response.data));
+      const newWeather = await this.weatherService
+        .getYandexFreeWeatherAt(place.lng, place.lat)
+        .pipe(
+          map((response) => ({
+            parts: response.data.forecast.parts.map(
+              (item): IWeatherPart => ({
+                name: item.name,
+                temp: item.temp,
+                humidity: item.humidity,
+                pressure_mm: item.pressure_mm,
+                pressure_pa: item.pressure_pa,
+                feels_like: item.feels_like,
+                wind_speed: item.wind_speed,
+                wind_dir: item.wind_dir,
+              }),
+            ),
+            temp: response.data.fact.temp,
+            wind_speed: response.data.fact.wind_speed,
+            wind_dir: response.data.fact.wind_dir,
+            wind_gust: response.data.fact.wind_gust,
+            feels_like: response.data.fact.feels_like,
+            pressure_pa: response.data.fact.pressure_pa,
+            pressure_mm: response.data.fact.pressure_mm,
+            humidity: response.data.fact.humidity,
+          })),
+        );
+
+      newWeather.subscribe((weather) => {
+        this.placeWeatherRepository.create({
+          ...weather,
+          placeId: Number(placeId),
+        });
+      });
+
+      return newWeather;
     }
+
     throw new HttpException(
       `Place with id: ${placeId} Not found`,
       HttpStatus.NOT_FOUND,

@@ -30,11 +30,12 @@ export class PlacesService {
     const actualWeather = await this.placeWeatherRepository.findAll({
       where: {
         placeId: placeId,
-        updatedAt: { [Op.gt]: new Date(Date.now() - MS_IN_DAY) },
+        createdAt: { [Op.gt]: new Date(Date.now() - MS_IN_DAY) },
       },
+      order: [['createdAt', 'DESC']],
     });
 
-    if (actualWeather.length) return actualWeather;
+    if (actualWeather.length) return actualWeather[0];
 
     const place = await this.placeRepository.findByPk(placeId);
     if (place) {
